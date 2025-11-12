@@ -1,76 +1,45 @@
-# TechMart Retail Operations Analysis using Advanced SQL 📈
+# TechMart Retail Operations Analysis: Driving Growth with Advanced SQL 🛒
 
-## Project Overview
+## Overview
+The goal of this project was to leverage **Advanced SQL** techniques to analyze key operational datasets from **TechMart**, a growing retail chain in North America and Europe. The analysis focused on solving core business challenges, including optimizing inventory, assessing employee performance, and understanding sales trends.
 
-This capstone project applies advanced SQL skills to analyze the operational and sales data of **TechMart**, a growing retail chain in North America and Europe. The goal of this analysis was to transform complex, multi-table datasets into clear, actionable business insights to support decision-making in areas like sales optimization, inventory management, and employee performance.
-
-The project involved extensive data cleaning, complex joining of four interconnected tables, and the application of advanced SQL techniques, including **Common Table Expressions (CTEs)** and **Window Functions**.
-
-***
+This involved rigorous data cleaning, complex querying using **Joins**, **CTEs**, and **Window Functions**, which ultimately delivered actionable insights on **[Your Main Insight, e.g., Regional Inventory Gaps]** and led to specific business recommendations.
 
 ## Business Understanding
+As a rapidly expanding business, TechMart requires granular data analysis to inform strategic decisions. The leadership team needs to ensure that expansion is profitable and sustainable.
 
-The primary stakeholder is the **TechMart Leadership Team**. As a rapidly expanding business, TechMart needs to optimize its operations to sustain growth.
+**Domain Knowledge:** In retail, understanding the relationship between product sales, stock levels, and employee performance is critical for maximizing profit margins and minimizing losses from holding excess or insufficient inventory. This analysis provides the data foundation for **merchandising optimization** and **targeted staff training**.
 
-The key business questions addressed by this analysis include:
-1.  Identifying the **top-performing product categories** and their correlation with stock levels.
-2.  Assessing **employee sales performance** across different geographical locations.
-3.  Analyzing **customer purchasing behavior** and loyalty program effectiveness.
-4.  Tracking **sales trends** over time to predict demand.
-
-***
-
-## Data Understanding & Cleaning
-
-The analysis utilized four interconnected tables from TechMart’s database:
+## Data Understanding
+The analysis uses four interconnected tables, which simulate a real-world enterprise database:
 
 | Table Name | Description | Key Challenges Handled |
 | :--- | :--- | :--- |
-| **Sales\_Transactions** | Detailed records of individual sales. | Missing values, incorrect data formats (e.g., "three" instead of 3). |
-| **Product\_Details** | Product inventory, categories, and pricing. | Non-numeric values in the price column, missing stock levels. |
-| **Employee\_Records** | Workforce details and store locations. | Missing values, non-numeric representations of sales figures. |
-| **Customer\_Demographics** | Customer age, location, and loyalty status. | "nan" or "N/A" values in age and loyalty program fields. |
+| **Sales\_Transactions** | Core sales records (total amount, quantity, date). | Missing values and non-numeric representations in quantity/amount columns. |
+| **Product\_Details** | Product prices, categories, and stock levels. | Non-numeric entries in price, and missing stock data. |
+| **Employee\_Records** | Employee IDs, roles, and store locations. | Data inconsistencies and non-numeric sales figures that required standardization. |
+| **Customer\_Demographics** | Age, gender, and loyalty program participation. | `nan` or `N/A` values in demographic fields. |
 
-**Data Preparation:** Before analysis, a rigorous cleaning process was executed to standardize formats, convert non-numeric entries, and handle `NULL` values using techniques appropriate for each column.
+**Data Cleaning:** All four tables required significant cleaning and type casting to ensure accuracy, which was a fundamental first step before writing complex analytical queries.
 
-***
 
-## Data Analysis & Key Findings
 
-The core of the analysis involved writing and optimizing complex SQL queries to combine and aggregate data across the four tables.
+## Modeling and Evaluation (Analytical Approach)
+Since this is a SQL analysis, the "Modeling" section is replaced by an "Analytical Approach" that highlights the technical methods used to extract insights.
 
-### Key Analytical Techniques Used:
-* **Joins:** Extensive use of `INNER`, `LEFT`, and `FULL OUTER JOIN` to connect sales data with employee, customer, and product details.
-* **CTEs (Common Table Expressions):** Used to modularize complex calculations, such as calculating average sales per employee or monthly revenue.
-* **Window Functions:** Utilized to calculate **running totals of sales**, **moving averages**, and **ranking** employee performance within specific store locations.
+**Key Analytical Methods:**
+* **Data Preparation:** Standardizing data formats and imputing/handling missing values across all four tables.
+* **Complex Joins:** Utilizing `INNER` and `LEFT JOIN` operations to connect all four datasets on shared IDs (e.g., CustomerID, ProductID, EmployeeID) to create a comprehensive view of transactions.
+* **CTEs (Common Table Expressions):** Used to modularize the calculation of metrics like **Average Sales per Employee** or **Monthly Revenue by Category**.
+* **Window Functions:** Applied to calculate **running totals of sales** and **rank employee performance** within their respective store locations, enabling dynamic comparisons.
 
-### Main Insight
-The most significant finding relates to **[Specific Topic, e.g., Regional Sales Performance / Product Category Profitability]**.
+**Key Finding:** The analysis revealed that the **[Top Product Category]** is the largest revenue driver but has the highest rate of **[Specific Issue, e.g., Out-of-Stock Incidents]** in the **[Specific Region, e.g., North American Stores]**.
 
-**Insight Summary:** [One-two sentences explaining the main insight. *Example: The Electronics category accounts for 60% of total revenue but is severely understocked in European stores, leading to significant lost sales opportunities.*]
+## Conclusion
 
-### Key SQL Query
-The following query was central to revealing this insight:
+This project successfully transformed TechMart's raw transactional data into clear business intelligence. The findings confirm that optimizing **inventory alignment** with sales velocity and addressing **employee performance gaps** in specific regions are the most immediate opportunities for growth.
 
-```sql
-[-- Replace with your most significant SQL query]
-WITH Monthly_Sales AS (
-    SELECT
-        strftime('%Y-%m', SaleDate) AS sale_month,
-        Category,
-        SUM(TotalAmount) AS monthly_revenue
-    FROM
-        Sales_Transactions AS st
-    JOIN
-        Product_Details AS pd ON st.ProductID = pd.ProductID
-    GROUP BY 1, 2
-)
-SELECT
-    sale_month,
-    Category,
-    monthly_revenue,
-    SUM(monthly_revenue) OVER (PARTITION BY Category ORDER BY sale_month) AS running_total
-FROM
-    Monthly_Sales
-ORDER BY
-    Category, sale_month;
+**Future Steps:**
+* **Predictive Analysis:** Integrate the SQL data with Python to build a **time-series model** to forecast demand for the next quarter, improving inventory accuracy.
+* **Dashboarding:** Develop a real-time **Tableau/Looker dashboard** based on the analytical queries to allow regional managers to track performance metrics continuously.
+* **Causal Analysis:** Use statistical methods to determine the direct impact of the loyalty program on customer lifetime value.
